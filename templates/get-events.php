@@ -34,16 +34,28 @@ if (isset($_GET['timezone'])) {
 
 // sprintf("%s/templates/json/events.json", dirname(__FILE__));
 // Read and parse our events JSON file into an array of event data arrays.
-$json = file_get_contents(dirname(__FILE__) . '/json/events.json');
-$input_arrays = json_decode($json, true);
 
+// $json = file_get_contents(dirname(__FILE__) . '/json/events.json');
+// $input_arrays = json_decode($json, true);
 // Accumulate an output array of event data arrays.
+
+		
+		$args = array( 'post_type' => 'bp_calender');
+		$loop = new WP_Query( $args );
+		while ( $loop->have_posts() ) : $loop->the_post();
+		  $id = get_the_ID();
+		  $title = get_post_meta( $id , '_bp_calender_title', true );
+		  $start = get_post_meta( $id , '_bp_calender_start_date', true );
+		  $end = get_post_meta( $id , '_bp_calender_end_date', true );
+		  $url = get_post_meta( $id , '_bp_calender_url', true );
+		  $input_arrays[] = array("title"=>$title, "start"=>$start, "end"=>$end, "url"=>$url);
+		endwhile;
+
 $output_arrays = array();
 foreach ($input_arrays as $array) {
 
 	// Convert the input array into a useful Event object
 	$event = new Event($array, $timezone);
-
 	// If the event is in-bounds, add it to the output
 	if ($event->isWithinDayRange($range_start, $range_end)) {
 		$output_arrays[] = $event->toArray();
