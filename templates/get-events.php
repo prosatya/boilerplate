@@ -38,8 +38,7 @@ if (isset($_GET['timezone'])) {
 // $json = file_get_contents(dirname(__FILE__) . '/json/events.json');
 // $input_arrays = json_decode($json, true);
 // Accumulate an output array of event data arrays.
-
-		
+	
 		$args = array( 'post_type' => 'bp_calender');
 		$loop = new WP_Query( $args );
 		while ( $loop->have_posts() ) : $loop->the_post();

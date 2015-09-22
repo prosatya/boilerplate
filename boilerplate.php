@@ -70,8 +70,8 @@ if(!class_exists('Boilerplate_Plugin'))
         */
 		public function event_scripts(){
 
-    		wp_enqueue_style( 'singulart_css', plugins_url('/css/fullcalendar.css', __FILE__) );
-    		//wp_enqueue_style( 'singulart_css', plugins_url('/css/fullcalendar.print.css', __FILE__) );
+    		wp_enqueue_style( 'fullcalendar_css', plugins_url('/css/fullcalendar.css', __FILE__) );
+    		wp_enqueue_style( 'custom_css', plugins_url('/css/custom.css', __FILE__) );
 		    wp_enqueue_script( 'moment_js', plugins_url('/js/moment.min.js', __FILE__), '', '', true );
 		    wp_enqueue_script( 'common_js', plugins_url('/js/jquery.min.js', __FILE__), '', '', true );
 		    wp_enqueue_script( 'fullcalendar_js', plugins_url('/js/fullcalendar.js', __FILE__), '', '', true );
@@ -83,13 +83,11 @@ if(!class_exists('Boilerplate_Plugin'))
         *Add scripts and CSS to the plugin Front end
         */
 		public function admin_event_scripts(){
-		
 			wp_enqueue_style( 'datepicker_css', plugins_url('/js/datepiker1/jquery.datetimepicker.css', __FILE__) );
 			wp_enqueue_script( 'common_js', plugins_url('/js/jquery.min.js', __FILE__), '', '', true );
 			wp_enqueue_script( 'datepicker_js', plugins_url('/js/datepiker1/jquery.js', __FILE__), '', '', true );
 			wp_enqueue_script( 'datepickercustom_js', plugins_url('/js/datepiker1/jquery.datetimepicker.js', __FILE__), '', '', true );
 			wp_enqueue_script( 'custom_js', plugins_url('/js/datepiker1/custom.js', __FILE__), '', '', true );
-		
 		}//END function
 		
 
@@ -146,19 +144,30 @@ if(!class_exists('Boilerplate_Plugin'))
 		
 		public function event_calender_callback($atts)
         {
-           
-        	include(sprintf("%s/templates/frontend.php", dirname(__FILE__)));
-           
-
+        	?>
+			<script>
+				jQuery(document).ready(function() {
+					jQuery('#calendar').fullCalendar({
+						defaultDate: new Date(),
+						editable: true,
+						eventLimit: true, // allow "more" link when too many events
+						events: <?php 
+							include(sprintf("%s/templates/get-events.php", dirname(__FILE__)));
+						?>
+					});
+					
+				});
+			</script>
+			<div id='calendar'></div>
+			<?php
         } // END  function 
 
        	//Add meta fields
 
         public function add_custom_meta_box( $post_type ){
-
-     		$post_types = array( 'bp_calender' );
+        	$post_types = array( 'bp_calender' );
      		if ( in_array( $post_type, $post_types )) {
-     			add_meta_box("event_start_date", "Create Event", array(&$this, "create_start_box"), $post_type );
+     			add_meta_box("event_start_date", "Create Event", array(&$this, "create_start_box"), $post_type, 'side', 'high' );
      		}
      		
        	}//END fundtion
