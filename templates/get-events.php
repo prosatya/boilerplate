@@ -44,11 +44,11 @@ if (isset($_GET['timezone'])) {
 		$loop = new WP_Query( $args );
 		while ( $loop->have_posts() ) : $loop->the_post();
 		  $id = get_the_ID();
-		  $title = get_post_meta( $id , '_bp_calender_title', true );
+		  //$title = get_post_meta( $id , '_bp_calender_title', true );
 		  $start = get_post_meta( $id , '_bp_calender_start_date', true );
 		  $end = get_post_meta( $id , '_bp_calender_end_date', true );
 		  $url = get_post_meta( $id , '_bp_calender_url', true );
-		  $input_arrays[] = array("title"=>$title, "start"=>$start, "end"=>$end, "url"=>$url);
+		  $input_arrays[] = array("title"=>get_the_title(), "start"=>$start, "end"=>$end, "url"=>$url);
 		endwhile;
 
 $output_arrays = array();

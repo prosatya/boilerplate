@@ -25,7 +25,7 @@ class Event {
 	// Constructs an Event object from the given array of key=>values.
 	// You can optionally force the timezone of the parsed dates.
 	public function __construct($array, $timezone=null) {
-
+		
 		$this->title = $array['title'];
 
 		if (isset($array['allDay'])) {
