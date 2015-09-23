@@ -150,7 +150,8 @@ class Boilerplate {
 	private function define_admin_hooks() {
 
 		$plugin_admin = new Boilerplate_Admin( $this->get_Boilerplate(), $this->get_version() );
-
+		require_once dirname( __FILE__ ) . '/class-tgm-plugin-activation.php';
+		$this->loader->add_action( 'tgmpa_register', $plugin_admin, 'my_theme_register_required_plugins' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'init', $plugin_admin, 'plugin_init');
