@@ -158,9 +158,8 @@ class Boilerplate {
 		$this->loader->add_action( 'init', $plugin_admin, 'create_posttype_calander' );
 		$this->loader->add_action( 'admin_init',$plugin_admin, 'admin_init' );
 	   	$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_menu' );
-	   	$this->loader->add_action( 'add_meta_boxes', $plugin_admin, 'add_custom_meta_box' );
-	   	$this->loader->add_action( "save_post", $plugin_admin, "save_created_meta_box" );
 	   	$this->loader->add_filter( 'event_calender', $plugin_admin, 'event_calender_callback' );
+	   	$this->loader->add_filter( 'rwmb_meta_boxes', $plugin_admin, 'Boilerplate_register_meta_boxes' );
 	   	$this->loader->add_shortcode( 'eventcal', $plugin_admin, 'event_calender_callback' );
 	}
 

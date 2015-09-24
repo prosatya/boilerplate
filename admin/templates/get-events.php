@@ -44,22 +44,23 @@ if (isset($_GET['timezone'])) {
 		while ( $loop->have_posts() ) : $loop->the_post();
 		  $id = get_the_ID();
 		  //$title = get_post_meta( $id , '_bp_calender_title', true );
-		  $start = get_post_meta( $id , '_bp_calender_start_date', true );
-		  $end = get_post_meta( $id , '_bp_calender_end_date', true );
-		  $url = get_post_meta( $id , '_bp_calender_url', true );
+		  $start = get_post_meta( $id , 'bp_calender_start_date', true );
+		  $end = get_post_meta( $id , 'bp_calender_end_date', true );
+		  $url = get_post_meta( $id , 'bp_calender_url', true );
 		  $input_arrays[] = array("title"=>get_the_title(), "start"=>$start, "end"=>$end, "url"=>$url);
 		endwhile;
 
-$output_arrays = array();
-foreach ($input_arrays as $array) {
+	$output_arrays = array();
+	if($input_arrays){
+		foreach ($input_arrays as $array) {
 
-	// Convert the input array into a useful Event object
-	$event = new Event($array, $timezone);
-	// If the event is in-bounds, add it to the output
-	if ($event->isWithinDayRange($range_start, $range_end)) {
-		$output_arrays[] = $event->toArray();
+			// Convert the input array into a useful Event object
+			$event = new Event($array, $timezone);
+			// If the event is in-bounds, add it to the output
+			if ($event->isWithinDayRange($range_start, $range_end)) {
+				$output_arrays[] = $event->toArray();
+			}
+		}
 	}
-}
-
-// Send JSON to the client.
-echo json_encode($output_arrays);
+	// Send JSON to the client.
+	echo json_encode($output_arrays);

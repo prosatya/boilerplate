@@ -168,96 +168,7 @@ class Boilerplate_Admin {
 		<div id='calendar'></div>
 		<?php
     } // END  function 
-
-   	//Add meta fields
-
-    public function add_custom_meta_box( $post_type ){
-    	$post_types = array( 'bp_calender' );
- 		if ( in_array( $post_type, $post_types )) {
- 			add_meta_box("event_start_date", "Create Event", array(&$this, "create_start_box"), $post_type, 'side', 'high' );
- 		}
- 		
-   	}//END fundtion
-
-   	//show meta fields
-    public function create_start_box( $post ){
-	    wp_nonce_field(basename(__FILE__), "meta-box-nonce");
-	    
-	    // if(get_post_meta($post->ID, '_bp_calender_title', true) ){
-	    //	 $meta_box_title = get_post_meta( $post->ID, '_bp_calender_title', true );
-		// }
-		// else{
-		// 	$meta_box_title = "";
-		// }
-		
-		if(get_post_meta($post->ID, '_bp_calender_start_date', true) ){
-	    	$meta_box_start_date = get_post_meta( $post->ID, '_bp_calender_start_date', true );
-		}
-		else{
-			$meta_box_start_date = "";
-		}
-		
-		if(get_post_meta($post->ID, '_bp_calender_end_date', true ) ){
-	    	$meta_box_end_date = get_post_meta( $post->ID, '_bp_calender_end_date', true );
-		}
-		else{
-			$meta_box_end_date = "";
-		}
-		
-		if(get_post_meta($post->ID, '_bpj_calender_end_date', true) ){
-	    	$meta_box_url = get_post_meta( $post->ID, '_bp_calender_url', true );
-		}
-		else{
-			$meta_box_url = "";
-		}
-	    
-	    // Use get_post_meta to retrieve an existing value from the database.
-	    ?>
-	    	<table>
-	    		<!--<tr>
-	        		<td><label>Event :&nbsp;</label></td><td><input type="text" size="14px" name="meta_box_title" id="meta_box_title" value="<?php if($meta_box_title){ echo $meta_box_title; } ?>" /></td>
-	        	</tr>-->
-	        	<tr>
-	        		<td><label>Start From :&nbsp;</label></td><td><input type="text" name="meta_box_start_date" id="meta_box_start_date" size="14px" value="<?php echo $meta_box_start_date;  ?>" /></td>
-	        	</tr>
-	        	<tr>
-	        		<td><label>Open Till :&nbsp;</label></td><td><input type="text" name="meta_box_end_date" id="meta_box_end_date" size="14px" value="<?php echo $meta_box_end_date; ?>"/></td>
-	        	</tr>
-	        	<tr>
-	        		<td><label>URL :&nbsp;</label></td><td><input type="text" name="meta_box_url" id="meta_box_url" size="14px" value="<?php echo $meta_box_url; ?>" placeholder="http://"/></td>
-	        	</tr>
-	        </table>
-	    <?php  
-	}//END fundtion
-
-	//save mata fields
-	function save_created_meta_box( $post_id ){
-			if ( array_key_exists('meta_box_title', $_POST ) ) {
-		            update_post_meta( $post_id,
-		               '_bp_calender_title',
-		                $_POST['meta_box_title']
-		            );
-		        }
-		    if ( array_key_exists('meta_box_start_date', $_POST ) ) {
-	            update_post_meta( $post_id,
-	               '_bp_calender_start_date',
-	                $_POST['meta_box_start_date']
-	            );
-	        }
-	        if ( array_key_exists('meta_box_end_date', $_POST ) ) {
-	            update_post_meta( $post_id,
-	               '_bp_calender_end_date',
-	                $_POST['meta_box_end_date']
-	            );
-	        }
-	        if ( array_key_exists('meta_box_url', $_POST ) ) {
-	            update_post_meta( $post_id,
-	               '_bp_calender_url',
-	                $_POST['meta_box_url']
-	            );
-	        }
-	}//END function
-
+	
 
 	// Create Custom post type  for calender 
 	function create_posttype_calander() {
@@ -315,6 +226,50 @@ class Boilerplate_Admin {
 		);
 
 		tgmpa( $plugins, $config );
+	}
+
+
+	function Boilerplate_register_meta_boxes( $meta_boxes )
+	{
+	    $prefix = 'bp_calender_';
+	    // 1st meta box
+	    $meta_boxes[] = array(
+	        'id'       => 'personal',
+	        'title'    => 'Description',
+	        'pages'    => array( 'bp_calender' ),
+	        'context'  => 'normal',
+	        'priority' => 'high',
+	        'fields' => array(
+	            array(
+	                'name'  => 'Start from',
+	                'desc'  => 'Format: 0000-00-00 00:00',
+	                'id'    => $prefix . 'start_date',
+	                'type'  => 'datetime',
+	                'std'   => '',
+	                'class' => '',
+	                'clone' => false,
+	            ),
+	            array(
+	                'name'  => 'Open Till',
+	                'desc'  => 'Format: 0000-00-00 00:00',
+	                'id'    => $prefix . 'end_date',
+	                'type'  => 'datetime',
+	                'std'   => '',
+	                'class' => '',
+	                'clone' => false,
+	            ),
+	            array(
+	                'name'  => 'URL',
+	                'desc'  => 'Format: http://',
+	                'id'    => $prefix . 'url',
+	                'type'  => 'URL',
+	                'std'   => '',
+	                'class' => '',
+	                'clone' => false,
+	            ),
+	        )
+	    );
+	    return $meta_boxes;
 	}
 
 }
